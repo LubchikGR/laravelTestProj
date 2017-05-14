@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace fileSaver\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

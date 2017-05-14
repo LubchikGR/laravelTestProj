@@ -6,12 +6,12 @@
  * Time: 16:18
  */
 
-namespace fileSaver\Handler;
+namespace fileSaver\Controllers;
 
 use Gregwar\ImageBundle\ImageHandler;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class FileSaver
+class ImageSaver
 {
     private $file;
     private $year;

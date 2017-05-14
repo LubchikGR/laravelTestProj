@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Album extends Migration
+class Albums extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,14 @@ class Album extends Migration
      */
     public function up()
     {
-        Schema::create('album', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-        });
+        Schema::create('albums', function (Blueprint $table) {
+        $table->increments('id');
+        $table->string('name');
+        $table->string('image');
+        $table->boolean('delete');
+        $table->integer('photoCounter');
+        $table->timestamps();
+    });
     }
 
     /**

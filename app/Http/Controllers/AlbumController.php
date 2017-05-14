@@ -4,6 +4,9 @@ declare(strict_types = 1);
 
 namespace fileSaver\Http\Controllers;
 
+use fileSaver\Controllers\ImageSaver;
+use fileSaver\Handler\FileSaver;
+use Gregwar\ImageBundle\ImageHandler;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
@@ -37,6 +40,8 @@ class AlbumController extends Controller
      */
     public function albumNew(Request $request)
     {
+        $fs = new ImageSaver(ImageHandler::class);
+        dump($fs);die;
         if ($request->isMethod('post')) {
             $this->validate($request, [
                 'name' => 'required|max:70',
@@ -45,11 +50,13 @@ class AlbumController extends Controller
             ]);
 
             $album = new Album();
+
             $album->name = $request->input('name');
             $photoLink = $request->input('photoLink');
             if($request->hasFile('image')) {
                 $file = $request->file('image');
             }
+            if()
 
 
             $album->save();

@@ -4,7 +4,7 @@ namespace fileSaver\Entity;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Albums extends Model
+class Album extends Model
 {
     /**
      * The attributes that are mass assignable.

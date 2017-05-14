@@ -1,6 +1,6 @@
 <?php
 
-namespace fileSaver;
+namespace fileSaver\Entity;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
