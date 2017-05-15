@@ -1,10 +1,10 @@
-@extends('base.blade.php')
-
+@extends('base')
 @section('content')
     <div class="panel-body">
         @include('errors.errors')
 
-        <form action="{{ url('edit', array('album' => $album->id)) }}" method="POST" class="form-horizontal">
+        <form action="{{ route('albumEdit', array('album' => $album->id)) }}"
+              method="POST" class="form-horizontal" enctype="multipart/form-data">
             {{ csrf_field() }}
 
             <div class="form-group">

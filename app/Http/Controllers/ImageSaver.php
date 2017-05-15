@@ -8,7 +8,7 @@
 
 namespace fileSaver\Controllers;
 
-use Gregwar\ImageBundle\ImageHandler;
+use Gregwar\Image\Image;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImageSaver
@@ -16,7 +16,6 @@ class ImageSaver
     private $file;
     private $year;
     private $month;
-    private $gregImg;
     private $quality;
     private $saveType;
     private $fileName;
@@ -24,10 +23,8 @@ class ImageSaver
     private $folderName;
     private $absolutePath;
 
-    public function __construct(ImageHandler $imgHandler)
+    public function __construct()
     {
-        $this->gregImg = $imgHandler;
-
         $date = new \DateTime();
         $this->year = $date->format('Y');
         $this->month = $date->format('m');
@@ -78,7 +75,7 @@ class ImageSaver
 
     private function convertMediaFile()
     {
-        $gregImage = $this->gregImg->open($this->absolutePath . $this->fileName);
+        $gregImage = Image::open($this->absolutePath . $this->fileName);
 
         if ($gregImage->correct()) {
             $gregImage->save(
@@ -107,7 +104,7 @@ class ImageSaver
             return false;
         }
 
-        $absoluteImagePath = __DIR__ . '/../../../../web' . $path;
+        $absoluteImagePath = __DIR__ . '/../../../public' . $path;
 
         if (file_exists($absoluteImagePath)) {
             @unlink($absoluteImagePath);
@@ -119,7 +116,7 @@ class ImageSaver
 
     public function getAbsolutePath($folderName)
     {
-        return base_path() . '/../web/uploads/' . $folderName . '/' . $this->year . '/' . $this->month . '/';
+        return base_path() . '/public/uploads/' . $folderName . '/' . $this->year . '/' . $this->month . '/';
     }
 
     public function getFileName()

@@ -17,7 +17,7 @@ class PhotoController extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function photoIndex(Request $request)
+    public function photoShow(Request $request)
     {
         return view('tasks.index');
     }

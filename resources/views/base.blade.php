@@ -6,6 +6,7 @@
     <!-- CSS и JavaScript -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-extend.min.css">
+    <link rel="stylesheet" href="/css/custom.css">
 </head>
 
 <body>

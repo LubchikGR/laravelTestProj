@@ -5,8 +5,6 @@ declare(strict_types = 1);
 namespace fileSaver\Http\Controllers;
 
 use fileSaver\Controllers\ImageSaver;
-use fileSaver\Handler\FileSaver;
-use Gregwar\ImageBundle\ImageHandler;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
@@ -17,7 +15,12 @@ use fileSaver\Entity\Album;
 
 class AlbumController extends Controller
 {
-//    protected $redirectTo = '/';
+    protected $fs;
+
+    public function __construct(ImageSaver $saver)
+    {
+        $this->fs = $saver;
+    }
 
     /**
      * Show album.
@@ -40,12 +43,10 @@ class AlbumController extends Controller
      */
     public function albumNew(Request $request)
     {
-        $fs = new ImageSaver(ImageHandler::class);
-        dump($fs);die;
         if ($request->isMethod('post')) {
             $this->validate($request, [
                 'name' => 'required|max:70',
-                'file' => 'required|max:10000|mimes:jpeg,png,jpg',
+                'file' => 'max:10000|mimes:jpeg,png,jpg',
                 'photoLink' => 'url'
             ]);
 
@@ -53,14 +54,16 @@ class AlbumController extends Controller
 
             $album->name = $request->input('name');
             $photoLink = $request->input('photoLink');
-            if($request->hasFile('image')) {
-                $file = $request->file('image');
+
+            if(!is_null($photoLink)) {
+                $path = $this->fs->upload($request->input('photoLink'),'gallery', 'jpg', 100);
+                $album->image = $path;
+            } elseif ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $path = $this->fs->upload($file,'gallery', 'jpg', 100);
+                $album->image = $path;
             }
-            if()
-
-
             $album->save();
-            // redirect
             return new RedirectResponse('/');
         } else {
             return view('album/new');

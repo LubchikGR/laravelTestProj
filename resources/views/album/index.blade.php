@@ -14,10 +14,12 @@
             <div class="panel-body" style="margin-top: 30px;">
                 <table class="table table-striped task-table">
                     <thead>
-                    <th>Альбоми</th>
+                    <th>Albums</th>
+                    <th>Count photo</th>
+                    <th>Album photo</th>
+                    <th>Actions</th>
                     </thead>
 
-                    <!-- Тело таблицы -->
                     <tbody>
                     @foreach ($albums as $item)
                         <tr>
@@ -26,14 +28,36 @@
                             </td>
 
                             <td class="table-text">
-                                <div>{{ $item->image }}</div>
+                                <div>{{ $item->photoCounter }}</div>
                             </td>
 
-                            <td>
-                                <!-- TODO: Кнопка Удалить -->
+                            <td class="artist-photo">
+                                <div class="image" style="background-image: url('{{ $item->image }}')"></div>
+                            </td>
+
+                            <td class="artist-photo">
+                                <a href="{{ route('photoNew') }}" class="btn btn-default">
+                                    Add photo
+                                </a>
+                                <a href="{{ route('albumShow', ['id' => $item->id]) }}" class="btn btn-default">
+                                    Show album
+                                </a>
+                                <a href="{{ route('albumEdit', ['id' => $item->id]) }}" class="btn btn-default">
+                                   Edit album
+                                </a>
+                                <a href="{{ route('albumDelete', ['id' => $item->id]) }}" class="btn btn-default">
+                                    Delete album
+                                </a>
                             </td>
                         </tr>
                     @endforeach
+
+                    <tfoot>
+                    <th>Albums</th>
+                    <th>Count photo</th>
+                    <th>Album photo</th>
+                    <th>Actions</th>
+                    </tfoot>
                     </tbody>
                 </table>
             </div>
