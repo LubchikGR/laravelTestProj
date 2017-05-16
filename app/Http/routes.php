@@ -18,12 +18,12 @@ Route::get('/', function () {
 
 });
 
-Route::get('album/show/{id}', 'AlbumController@albumIndex')->name('albumIndex');
+Route::get('album/show/{id}', 'AlbumController@albumShow')->name('albumShow');
 Route::match(['get', 'post'], 'album/edit/{id}', 'AlbumController@albumEdit')->name('albumEdit');
 Route::match(['get', 'post'], 'album/new', 'AlbumController@albumNew')->name('albumNew');
 Route::get('album/delete/{id}', 'AlbumController@albumDelete')->name('albumDelete');
 
 Route::get('photo/show/{id}', 'PhotoController@photoShow')->name('photoShow');
 Route::match(['get', 'post'], 'photo/edit/{id}', 'PhotoController@photoEdit')->name('photoEdit');
-Route::match(['get', 'post'], 'photo/new', 'PhotoController@photoNew')->name('photoEdit');
+Route::match(['get', 'post'], 'photo/new', 'PhotoController@photoNew')->name('photoNew');
 Route::get('photo/delete/{id}', 'PhotoController@photoDelete')->name('photoDelete');

@@ -36,6 +36,9 @@
                     <button type="submit" class="btn btn-default">
                         <i class="fa fa-plus"></i> Save
                     </button>
+                    <a href="{{ url('/') }}" class="btn btn-default">
+                        Cancel
+                    </a>
                 </div>
             </div>
         </form>

@@ -1,17 +1,19 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace fileSaver\Http\Controllers;
 
 use fileSaver\Controllers\ImageSaver;
+use fileSaver\Entity\Photo;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 use fileSaver\Http\Requests;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use fileSaver\Entity\Album;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpFoundation\Response;
 
 class AlbumController extends Controller
 {
@@ -26,14 +28,20 @@ class AlbumController extends Controller
      * Show album.
      *
      * @param  Request $request
-     * @param  Album $album
-     * @return View
+     * @param  int $album
+     * @return View|Response
      */
-    public function albumIndex(Request $request, Album $album)
+    public function albumShow(Request $request, int $album)
     {
-        return view('album/index', [
-            'album' => $album,
-        ]);
+        $album = Album::find($album);
+        if (!is_null($album)) {
+            return view('album/show', [
+                'album' => $album,
+                'photos' => Photo::where('album_id', $album->id)->get()
+            ]);
+        } else {
+            return new Response('', 404);
+        }
     }
 
     /**
@@ -55,12 +63,12 @@ class AlbumController extends Controller
             $album->name = $request->input('name');
             $photoLink = $request->input('photoLink');
 
-            if(!is_null($photoLink)) {
-                $path = $this->fs->upload($request->input('photoLink'),'gallery', 'jpg', 100);
+            if (!empty($photoLink)) {
+                $path = $this->fs->upload($request->input('photoLink'), 'gallery', 'jpg', 100);
                 $album->image = $path;
             } elseif ($request->hasFile('file')) {
                 $file = $request->file('file');
-                $path = $this->fs->upload($file,'gallery', 'jpg', 100);
+                $path = $this->fs->upload($file, 'gallery', 'jpg', 100);
                 $album->image = $path;
             }
             $album->save();
@@ -74,29 +82,69 @@ class AlbumController extends Controller
      * Edit album.
      *
      * @param  Request $request
-     * @param  Album $album
-     * @return View
+     * @param  int $album
+     * @return View|RedirectResponse|Response
      */
-    public function albumEdit(Request $request, Album $album)
+    public function albumEdit(Request $request, int $album)
     {
-        $this->validate($request, [
-            'name' => 'required|max:70',
-        ]);
+        $album = Album::find($album);
 
-        return view('album/edit', [
-            'album' => $album
-        ]);
+        if (is_null($album)) {
+            return new Response('', 404);
+        }
+
+        if ($request->isMethod('post')) {
+            $this->validate($request, [
+                'name' => 'required|max:70',
+                'file' => 'max:10000|mimes:jpeg,png,jpg'
+            ]);
+
+            $album->name = $request->input('name');
+
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $path = $this->fs->upload($file, 'gallery', 'jpg', 100);
+                if ($path && !is_null($album->image)) {
+                    $this->fs->removeFile($album->image);
+                }
+                $album->image = $path;
+            }
+            $album->save();
+
+            return new RedirectResponse('/');
+        } else {
+            return view('album/edit', [
+                'album' => $album
+            ]);
+        }
     }
 
     /**
-     * Set deleted album.
+     * Delete album.
      *
      * @param  Request $request
-     * @param  Album $album
-     * @return Response
+     * @param  int $album
+     * @return RedirectResponse|Response
      */
-    public function albumDelete(Request $request, Album $album)
+    public function albumDelete(Request $request, int $album)
     {
-        return new Response();
+        $album = Album::find($album);
+
+        if (!is_null($album)) {
+            $this->fs->removeFile($album->image);
+            $this->deleteAllAlbomPhoto($album->id);
+            $album->delete();
+            return new RedirectResponse("/");
+        } else {
+            return new Response('', 404);
+        }
+    }
+
+    private function deleteAllAlbomPhoto($albumId)
+    {
+        $photos = Photo::where('album_id', $albumId)->get();
+        foreach ($photos as $photo) {
+            $this->fs->removeFile($photo->image);
+        }
     }
 }

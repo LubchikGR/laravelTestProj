@@ -18,7 +18,7 @@ class Photos extends Migration
             $table->string('image');
             $table->boolean('delete');
             $table->integer('album_id')->unsigned();
-            $table->foreign('album_id')->references('id')->on('album');
+            $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
             $table->timestamps();
         });
     }

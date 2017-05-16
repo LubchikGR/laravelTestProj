@@ -9,6 +9,11 @@
                 <div class="col-sm-offset-1 col-sm-3">
                     Album name: {{ $album->name }}
                 </div>
+                <div class="col-sm-offset-1 col-sm-3">
+                    <a href="{{ url('/') }}" class="btn btn-default">
+                        Return back
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -38,6 +43,12 @@
                         <td class="artist-photo">
                             <a href="{{ route('photoShow', ['id' => $item->id]) }}" class="btn btn-default">
                                 View photo
+                            </a>
+                            <a href="{{ route('photoEdit', ['id' => $item->id]) }}" class="btn btn-default">
+                                Edit photo
+                            </a>
+                            <a href="{{ route('photoDelete', ['id' => $item->id]) }}" class="btn btn-default">
+                                Delete photo
                             </a>
                         </td>
                     </tr>

@@ -30,7 +30,26 @@
                 <label for="image" class="col-sm-3 control-label">Photo</label>
 
                 <div class="col-sm-6">
-                    <input type="file" name="image" id="image" class="form-control">
+                    <input type="file" name="file" id="image" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="album-photo-link" class="col-sm-3 control-label">Link photo</label>
+
+                <div class="col-sm-6">
+                    <input type="text" name="photoLink" id="album-photo-link" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-6">
+                    <button type="submit" class="btn btn-default">
+                        <i class="fa fa-plus"></i> Save
+                    </button>
+                    <a href="{{ url('/') }}" class="btn btn-default">
+                        Cancel
+                    </a>
                 </div>
             </div>
         </form>

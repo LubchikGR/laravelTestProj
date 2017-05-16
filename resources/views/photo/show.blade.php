@@ -1,36 +1,54 @@
-@extends('base.blade.php')
-
+@extends('base')
 @section('content')
+    <div class="panel panel-default">
+        <div class="panel-body" style="margin-top: 30px;">
+            <table class="table table-striped task-table">
+                <thead>
+                <th>Photo name</th>
+                <th>Photo image</th>
+                <th>Photo created</th>
+                <th>Album name</th>
+                <th>Actions</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="table-text">
+                            <div>{{ $photo->name }}</div>
+                        </td>
 
-    <!-- Bootstrap шаблон... -->
+                        <td class="artist-photo">
+                            <div class="image" style="background-image: url('{{ $photo->image }}')"></div>
+                        </td>
 
-    <div class="panel-body">
-        <!-- Отображение ошибок проверки ввода -->
-    @include('common.errors')
+                        <td class="table-text">
+                            <div>{{ $photo->created_at }}</div>
+                        </td>
 
-    <!-- Форма новой задачи -->
-        <form action="{{ url('task') }}" method="POST" class="form-horizontal">
-        {{ csrf_field() }}
+                        <td class="table-text">
+                            <div>{{ \fileSaver\Entity\Album::find($photo->album_id)->name }}</div>
+                        </td>
 
-        <!-- Имя задачи -->
-            <div class="form-group">
-                <label for="task" class="col-sm-3 control-label">Задача</label>
-
-                <div class="col-sm-6">
-                    <input type="text" name="name" id="task-name" class="form-control">
-                </div>
-            </div>
-
-            <!-- Кнопка добавления задачи -->
-            <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-6">
-                    <button type="submit" class="btn btn-default">
-                        <i class="fa fa-plus"></i> Добавить задачу
-                    </button>
-                </div>
-            </div>
-        </form>
+                        <td class="artist-photo">
+                            <a href="{{ route('albumShow', ['id' => $photo->id]) }}" class="btn btn-default">
+                                Show album
+                            </a>
+                            <a href="{{ route('photoEdit', ['id' => $item->id]) }}" class="btn btn-default">
+                                Edit photo
+                            </a>
+                            <a href="{{ route('photoDelete', ['id' => $photo->id]) }}" class="btn btn-default">
+                                Delete Photo
+                            </a>
+                        </td>
+                    </tr>
+                <tfoot>
+                <th>Photo name</th>
+                <th>Photo image</th>
+                <th>Photo created</th>
+                <th>Album name</th>
+                <th>Actions</th>
+                </tfoot>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <!-- TODO: Текущие задачи -->
 @endsection
