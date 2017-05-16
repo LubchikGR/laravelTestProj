@@ -64,7 +64,7 @@ class PhotoController extends Controller
             $photoLink = $request->input('photoLink');
 
             if (!empty($photoLink)) {
-                $path = $this->fs->upload($request->input('photoLink'), 'gallery/photo', 'jpg', 100);
+                $path = $this->fs->upload($photoLink, 'gallery/photo', 'jpg', 100);
                 $photo->image = $path;
             } elseif ($request->hasFile('file')) {
                 $file = $request->file('file');

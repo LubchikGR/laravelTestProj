@@ -64,7 +64,7 @@ class AlbumController extends Controller
             $photoLink = $request->input('photoLink');
 
             if (!empty($photoLink)) {
-                $path = $this->fs->upload($request->input('photoLink'), 'gallery', 'jpg', 100);
+                $path = $this->fs->upload($photoLink, 'gallery', 'jpg', 100);
                 $album->image = $path;
             } elseif ($request->hasFile('file')) {
                 $file = $request->file('file');

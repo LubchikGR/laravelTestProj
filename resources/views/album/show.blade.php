@@ -10,6 +10,9 @@
                     Album name: {{ $album->name }}
                 </div>
                 <div class="col-sm-offset-1 col-sm-3">
+                    <a href="{{ route('photoNew') }}" class="btn btn-default">
+                        Add photo
+                    </a>
                     <a href="{{ url('/') }}" class="btn btn-default">
                         Return back
                     </a>

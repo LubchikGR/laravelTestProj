@@ -9,6 +9,7 @@
 namespace fileSaver\Controllers;
 
 use Gregwar\Image\Image;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImageSaver
@@ -35,13 +36,13 @@ class ImageSaver
         if (null === $file) {
             return false;
         } else {
-            $this->file         = $file;
-            $this->folderName   = $folderName;
-            $this->saveType     = $saveType;
-            $this->quality      = $quality;
+            $this->file = $file;
+            $this->folderName = $folderName;
+            $this->saveType = $saveType;
+            $this->quality = $quality;
             $this->absolutePath = $this->getAbsolutePath($this->folderName);
-            $this->extension    = $this->getExtension();
-            $this->fileName     = $this->getFileName(); //function use $this->extension // call after getExtension()
+            $this->extension = $this->getExtension();
+            $this->fileName = $this->getFileName(); //function use $this->extension // call after getExtension()
 
             if (is_object($file)) {
                 return $this->saveObjectFile();
@@ -65,12 +66,12 @@ class ImageSaver
 
     private function saveFromLink()
     {
-        if (@copy($this->file, $this->absolutePath . $this->fileName)) {
-            $this->convertMediaFile();
+        $fs = new Filesystem();
 
-            return $this->getRelativePath();
-        }
-        return false;
+        $fs->copy($this->file, $this->absolutePath . $this->fileName);
+        $this->convertMediaFile();
+
+        return $this->getRelativePath();
     }
 
     private function convertMediaFile()
@@ -88,11 +89,12 @@ class ImageSaver
 
     private function getExtension()
     {
-        if($this->file instanceof UploadedFile) {
+        if ($this->file instanceof UploadedFile) {
             /*TODO not sure mb need refactor */
             return $this->file->getClientOriginalExtension();
         } else {
-            $extension = pathinfo($this->file, PATHINFO_EXTENSION);
+            $ext = explode('?', $this->file);
+            $extension = pathinfo($ext[0], PATHINFO_EXTENSION);
             return empty($extension) ? 'jpg' : $extension;
         }
     }
@@ -121,7 +123,7 @@ class ImageSaver
 
     public function getFileName()
     {
-        return sha1(uniqid(mt_rand(), true)) . '.' .$this->extension;
+        return sha1(uniqid(mt_rand(), true)) . '.' . $this->extension;
     }
 
     public function getRelativePath()
